@@ -1,10 +1,15 @@
 const board = document.getElementById('game-board');
+const instructionText = document.getElementById('instruction-text');
+const logo = document.getElementById('logo');
 
 //variáveis do jogo
 const gridSize = 20;
 let snake = [{x:10, y:10}];
 let food = generateFood();
 let direction = 'right';
+let gameInterval;
+let gameSpeedDelay = 500;
+let gameStarted = false;
 
 
 //desenha o mapa do jogo, a cobra e a comida
@@ -68,7 +73,56 @@ function move(){
             break;
     }
     snake.unshift(head);
-    snake.pop();
+    //snake.pop();
 
-    if(head.x === food.x && )
+    if(head.x === food.x && head.y === food.y){
+        food = generateFood();
+        clearInterval();
+        gameInterval = setInterval(() => {
+            move();
+            draw();
+        }, gameSpeedDelay);
+    }else{
+        snake.pop();
+    }
 }
+
+//start game function
+function startGame(){
+    gameStarted = true;
+    instructionText.style.display = 'none';
+    logo.style.display = 'none';
+    gameInterval = setInterval(()=>{
+        move();
+        //checkCollision();
+        draw();
+    }, gameSpeedDelay);
+}
+
+//começando o game
+function handleKeyPress(event){
+    if(
+        
+        (!gameStarted && event.code === "Space") || 
+        (!gameStarted && event.key === " ")
+    ){ 
+        startGame();
+    }else{
+        switch(event.key){
+            case 'ArrowUp':
+                direction = "up";
+                break;
+            case 'ArrowDown':
+                direction = "down";
+                break;
+            case 'ArrowLeft':
+                direction = "left";
+                break;
+            case 'ArrowRight':
+                direction = "right";
+                break;
+        }
+    }
+}
+
+document.addEventListener('keydown', handleKeyPress);
