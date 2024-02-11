@@ -8,7 +8,7 @@ let snake = [{x:10, y:10}];
 let food = generateFood();
 let direction = 'right';
 let gameInterval;
-let gameSpeedDelay = 500;
+let gameSpeedDelay = 200;
 let gameStarted = false;
 
 
@@ -77,7 +77,8 @@ function move(){
 
     if(head.x === food.x && head.y === food.y){
         food = generateFood();
-        clearInterval();
+        increaseSpeed();
+        clearInterval(gameInterval);
         gameInterval = setInterval(() => {
             move();
             draw();
@@ -126,3 +127,15 @@ function handleKeyPress(event){
 }
 
 document.addEventListener('keydown', handleKeyPress);
+
+function increaseSpeed(){
+    if(gameSpeedDelay > 150){
+        gameSpeedDelay -= 5;
+    }else if(gameSpeedDelay > 100){
+        gameSpeedDelay -= 3;
+    }else if(gameSpeedDelay > 50){
+        gameSpeedDelay -= 2;
+    }else if(gameSpeedDelay > 25){
+        gameSpeedDelay -= 1;
+    } 
+}
